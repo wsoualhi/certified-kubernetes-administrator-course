@@ -152,3 +152,9 @@ scp remotenode:/opt/cluster1.db /opt
 
 # important file that contains information on service ips
 cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep cluster-ip-range
+
+# identify the kube-api ps and find the logs
+``` sh
+crictl ps -a
+crictl logs container-id
+```

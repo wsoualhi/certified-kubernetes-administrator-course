@@ -1,0 +1,17 @@
+apiVersion: k0sctl.k0sproject.io/v1beta1
+kind: cluster
+spec:
+  hosts:
+  - role: controller+worker
+    installFlags:
+      # the following is used in order to be able to deploy managers and workers within the same node
+      - --no-taints
+      # the following is used in order to enable CCM that will be deployed using helm charts after the cluster is deployed
+      - --enable-cloud-provider
+      - --kubelet-extra-args="--cloud-provider=external"
+    ssh:
+      address: ws-k0s-cka
+      keyPath: /Users/wassimsoualhi/.ssh/id_rsa
+      user: ubuntu
+  k0s:
+    version: v1.27.2+k0s.0
