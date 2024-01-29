@@ -144,7 +144,9 @@ ETCDCTL_API=3 etcdctl --endpoints 10.2.0.9:2379 \
 #scp, remote to loca, on the local server
 scp remotenode:/opt/cluster1.db /opt
 
-# install kube : look for "install kubeadm" https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+# install kube 
+
+look for "install kubeadm" https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
 # find the init system - here it's systemd
 > ps -p 1
@@ -157,4 +159,17 @@ cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep cluster-ip-range
 ``` sh
 crictl ps -a
 crictl logs container-id
+```
+# base64 maniputation
+```
+# encoding a certificate in base64
+cat certificate-csr.csr | base64 -w 0
+```
+# grep before and after
+```
+grep -B 3 -A 2 foo 
+```
+# count the lines
+```
+k get roles -A | wc -l
 ```
