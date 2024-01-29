@@ -173,3 +173,14 @@ grep -B 3 -A 2 foo
 ```
 k get roles -A | wc -l
 ```
+# create role and rolebindings
+
+To create a Role:
+```
+kubectl create role developer --namespace=default --verb=list,create,delete --resource=pods
+```
+
+To create a RoleBinding:
+```
+kubectl create rolebinding dev-user-binding --namespace=default --role=developer --user=dev-user
+```
