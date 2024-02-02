@@ -184,3 +184,30 @@ To create a RoleBinding:
 ```
 kubectl create rolebinding dev-user-binding --namespace=default --role=developer --user=dev-user
 ```
+# set service accounts
+```
+kubectl set serviceaccount deploy/web-dashboard dashboard-sa
+```
+# kubectx and kubens
+Installation
+```sh
+sudo git clone https://github.com/ahmetb/kubectx /opt/kubectx
+sudo ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx
+#To list all contexts
+kubectx
+#To switch to a new context:
+kubectx <context_name>
+#To switch back to previous context:
+kubectx -
+#To see current context:
+kubectx -c
+```
+Installation
+```sh
+sudo git clone https://github.com/ahmetb/kubectx /opt/kubens
+sudo ln -s /opt/kubectx/kubens /usr/local/bin/kubens
+#To switch to a new namespace:
+kubens <new_namespace>
+#To switch back to previous namespace:
+kubens -
+```
