@@ -240,3 +240,44 @@ kubens -
     ```
     sudo journalctl -u kube-apiserver
     ```
+- in case of issues, change things in the manifest
+
+    ```
+    cd /etc/kubernetes/manifest
+    vi ...
+    ```
+# Troubleshooting nodes
+- SSH into the node
+    ```
+    systemctl status containerd
+    systemctl status kubelet
+    systemctl start kubelet
+    sudo journalctl -u kubelet -f
+    /var/lib/kubelet/config.yaml
+    ```
+- kubelet config is in 
+    ```
+   /var/lib/kubelet/config.yaml
+    ```
+# Worker Node Failure
+
+  - Check node
+    ```
+    kubectl get nodes
+    kubectl describe node worker-1
+    ```
+  - Check the possible **`CPU`** and **`MEMORY`**  using **`top`** and **`df -h`** 
+    ```
+    top
+    df -h
+    ```
+  - Check the status and the logs of the **`kubelet`** for the possible issues.
+    ```
+    serivce kubelet status
+    sudo journalctl -u kubelet
+    ```
+  - Check the **`kubelet`** Certificates, they are not expired, and in the right group and issued by the right CA.
+
+    ```
+    openssl x509 -in /var/lib/kubelet/worker-1.crt -text
+    ```
