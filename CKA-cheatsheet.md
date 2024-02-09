@@ -135,15 +135,27 @@ kubeadm upgrade plan
 k config view
 
 # etcd commands
-ETCDCTL_API=3 etcdctl --endpoints 10.2.0.9:2379 \
+  ```
+  export ETCDCTL_API=3
+   
+  ETCDCTL_API=3 etcdctl --endpoints 10.2.0.9:2379 \
   --cert=/etc/kubernetes/pki/etcd/server.crt \
   --key=/etc/kubernetes/pki/etcd/server.key \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
   member list
 
-#scp, remote to loca, on the local server
-scp remotenode:/opt/cluster1.db /opt
+  kubectl exec etcd-master -n kube-system -- sh -c "ETCDCTL_API=3 etcdctl get / --prefix --keys-only --limit=10 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt  --key /etc/kubernetes/pki/etcd/server.key" 
 
+  etcdctl snapshot save 
+  etcdctl endpoint health
+  etcdctl get
+  etcdctl put
+   ```
+
+# scp, remote to loca, on the local server
+   ```
+   scp remotenode:/opt/cluster1.db /opt
+   ```
 # install kube 
 
 look for "install kubeadm" https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
@@ -254,6 +266,7 @@ kubens -
     systemctl start kubelet
     sudo journalctl -u kubelet -f
     /var/lib/kubelet/config.yaml
+    ps -aux | grep kubelet
     ```
 - kubelet config is in 
     ```
@@ -281,3 +294,47 @@ kubens -
     ```
     openssl x509 -in /var/lib/kubelet/worker-1.crt -text
     ```
+# Json
+```
+kubectl get pv --sort-by=.spec.capacity.storage -o=custom-columns=NAME:.metadata.name,CAPACITY:.spec.capacity.storageNAME       CAPACITY
+pv-log-4   40Mi
+pv-log-1   100Mi
+pv-log-2   200Mi
+pv-log-3   300Mi
+
+kubectl config view --kubeconfig=my-kube-config -o jsonpath="{.contexts[?(@.context.user=='aws-user')].name}"
+```
+# Create an NGINX Pod
+```
+kubectl run nginx --image=nginx
+```
+# Generate POD Manifest YAML file (-o yaml). Don't create it(--dry-run)
+```
+kubectl run nginx --image=nginx --dry-run=client -o yaml
+```
+# Create a deployment
+```
+kubectl create deployment --image=nginx nginx
+```
+# Generate Deployment YAML file (-o yaml). Don't create it(--dry-run)
+```
+kubectl create deployment --image=nginx nginx --dry-run=client -o yaml
+```
+# Generate Deployment YAML file (-o yaml). Don’t create it(–dry-run) and save it to a file.
+```
+kubectl create deployment --image=nginx nginx --dry-run=client -o yaml > nginx-deployment.yaml
+
+kubectl create deployment --image=nginx nginx --replicas=4 --dry-run=client -o yaml > nginx-deployment.yaml
+```
+# Create an NGINX Pod
+```
+kubectl run nginx --image=nginx
+kubectl run nginx --image=nginx --dry-run=client -o yaml
+```
+# Create a Services
+```
+kubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o yaml
+kubectl create service clusterip redis --tcp=6379:6379 --dry-run=client -o yaml 
+kubectl expose pod nginx --type=NodePort --port=80 --name=nginx-service --dry-run=client -o yaml
+kubectl create service nodeport nginx --tcp=80:80 --node-port=30080 --dry-run=client -o yaml
+```
